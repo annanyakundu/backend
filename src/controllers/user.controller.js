@@ -7,8 +7,8 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const registerUser= asyncHandler(async(req,res)=>{
 //get user details from frontend 
-     const {fullname, username, email,password}=req.body // form/json 
-     console.log("email: ",email);
+     const {fullname, email, username,password}=req.body // form/json 
+    //  console.log("email: ",email);
 
 //VALIDATIONN
     // if(fullname===""){
@@ -23,13 +23,14 @@ const registerUser= asyncHandler(async(req,res)=>{
 
 //CHECK IF USER EXISTING OR NOT
    
-    const existedUser=User.findOne({
+    const existedUser=await User.findOne({
         $or:[{username},{email}]
     })
     if(existedUser){
         throw new ApiError(409,"User with this email or username already exists!")
     }
-
+ //console.log(req.files);
+ 
 //CHECK FOR IMAGES,AVATAR
     const avatarLocalPath =req.files?.avatar[0]?.path ;
     const coverImageLocalPath=req.files?.coverImage[0]?.path;
@@ -51,7 +52,7 @@ const registerUser= asyncHandler(async(req,res)=>{
     coverImage:coverImage?.url||"",
     email,
     password,
-    username:username.toLoweCase()
+    username:username.toLowerCase()
    })
 
 //REMOVE PASSWORD AND REFRESHTOKEN FIELD FROM RESPONSE 

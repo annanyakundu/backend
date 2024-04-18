@@ -11,7 +11,7 @@ class ApiError extends Error{
         this.statusCode=statusCode
         this.data=null
         this.message=message
-        this.success=flag
+        this.success=false
         this.errors=errors
         if(stack){
             this.stack=stack
